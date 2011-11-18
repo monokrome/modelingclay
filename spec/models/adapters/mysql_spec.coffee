@@ -34,5 +34,4 @@ describe 'MySqlAdapter', ->
 			adapter.disconnect()
 			
 			expect(adapter.client.end).toHaveBeenCalled()
-		
-		
+
