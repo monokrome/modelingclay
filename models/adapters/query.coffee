@@ -9,6 +9,14 @@ SQL_EXPRESSION_TRANSLATION = {
     'lte': '<=',
 }
 
+zip = (keys, values) ->
+    obj = {}
+    
+    for key in keys
+        obj[key] = values.shift()
+    
+    return obj
+
 class Query
     constructor: (@adapter) ->
         @type = null
@@ -106,7 +114,13 @@ class Query
         return queryParts.join('\n')
     
     execute: ->
-        return @adapter.execute(this.toString(), @valuesList)
+        return @adapter.execute(this.toString(), @valuesList, @_handleExecute)
+    
+    _handleExecute: (error, results, fields) =>
+        @_results = [];
+        
+        for row in results
+            @_results.push(zip(fields, row))
     
 
 exports.Query = Query

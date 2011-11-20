@@ -1,13 +1,15 @@
 MySqlAdapter = require('../../../models/adapters/mysql').MySqlAdapter
 Query = require('../../../models/adapters/query').Query
 
+mysql = require 'mysql'
+
 mysqlMOCK = {
     createClient: ->
         return {
             end: ->
                 return true
-            ping: (callback) ->
-                callback()
+            execute: (sql, params, callback) ->
+                # lol do nothing.
         }
 }
 
@@ -43,4 +45,18 @@ describe 'MySqlAdapter', ->
             adapter = new MySqlAdapter()
             
             expect(adapter.query()).toBeInstanceOf(Query)
-        
+    
+    describe '#execute', ->
+        it 'should exec the query', ->
+            spyOn(mysql.Client.prototype, '_connect');
+            spyOn(mysql.Client.prototype, 'query').andCallThrough()
+            
+            adapter = new MySqlAdapter(mysql)
+            adapter.connect('hostname', 'username', 'password', 'database')
+            
+            testCallback = ->
+            
+            adapter.execute('SELECT * FROM foo WHERE(x = ?)', [1], testCallback)
+            
+            expect(mysql.Client.prototype.query).toHaveBeenCalledWith('SELECT * FROM foo WHERE(x = ?)', [1], testCallback)
+            

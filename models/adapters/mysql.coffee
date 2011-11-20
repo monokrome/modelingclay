@@ -20,6 +20,9 @@ class MySqlAdapter extends AdapterInterface
     
     query: ->
         return new Query(this)
+    
+    execute: (sql_statement, sql_params, callback) ->
+        @client.query(sql_statement, sql_params, callback)
 
 exports.MySqlAdapter = MySqlAdapter
    

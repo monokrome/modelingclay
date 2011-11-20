@@ -96,7 +96,7 @@ describe 'Query', ->
         it 'should call through to the adapter', ->
             fakeAdapter = {
                 execute: ->
-                    
+                    # do nothing.
             }
             
             spyOn(fakeAdapter, 'execute')
@@ -105,4 +105,21 @@ describe 'Query', ->
             q.select('some_field', 'another_field').from('a_table').join('a_table', 'some_field', 'table_b', 'field_b').where('some_field__neq', 'my_value')
             q.execute()
             
-            expect(fakeAdapter.execute).toHaveBeenCalledWith(q.toString(), ['my_value'])
+            expect(fakeAdapter.execute).toHaveBeenCalledWith(q.toString(), ['my_value'], q._handleExecute)
+        
+    describe '#_handleExecute', ->
+        it 'should store the results', ->
+            fake_rows = [
+                [1, 'string'],
+                [2, 'another string']
+            ]
+            
+            fake_fields = ['id', 'thing']
+            
+            q = new Query()
+            q._handleExecute(null, fake_rows, fake_fields)
+            
+            expect(q._results.length).toEqual(2)
+            expect(q._results).toContain({id: 1, thing: 'string'})
+            expect(q._results).toContain({id: 2, thing: 'another string'})
+        
