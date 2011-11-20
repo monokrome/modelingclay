@@ -1,4 +1,5 @@
 AdapterInterface = require('./interface').AdapterInterface
+Query = require('./query').Query
 
 mysql = require 'mysql'
 
@@ -7,15 +8,18 @@ class MySqlAdapter extends AdapterInterface
         if mysql_lib isnt null
             mysql = mysql_lib
         
-    connect: (@hostname, @username, password, @database) =>
+    connect: (@hostname, @username, password, @database) ->
         @client = mysql.createClient({
                                     host: @hostname,
                                     user: @username,
                                     password: password,
                                 })
     
-    disconnect: =>
+    disconnect: ->
         @client.end()
+    
+    query: ->
+        return new Query(this)
 
 exports.MySqlAdapter = MySqlAdapter
    

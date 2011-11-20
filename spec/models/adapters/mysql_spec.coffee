@@ -1,10 +1,13 @@
 MySqlAdapter = require('../../../models/adapters/mysql').MySqlAdapter
+Query = require('../../../models/adapters/query').Query
 
 mysqlMOCK = {
     createClient: ->
         return {
             end: ->
                 return true
+            ping: (callback) ->
+                callback()
         }
 }
 
@@ -34,4 +37,10 @@ describe 'MySqlAdapter', ->
             adapter.disconnect()
             
             expect(adapter.client.end).toHaveBeenCalled()
-
+    
+    describe '#query', ->
+        it 'should return a new instance of Query', ->
+            adapter = new MySqlAdapter()
+            
+            expect(adapter.query()).toBeInstanceOf(Query)
+        

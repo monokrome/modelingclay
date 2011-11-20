@@ -10,7 +10,7 @@ SQL_EXPRESSION_TRANSLATION = {
 }
 
 class Query
-    constructor: ->
+    constructor: (@adapter) ->
         @type = null
         @select_fields = null
         @primary_table = null
@@ -38,12 +38,12 @@ class Query
         
         return this
     
-    join: (primary_table, primary_field, secondary_table, secondary_field) =>
-        @_add_join(new Join(primary_table, primary_field, secondary_table, secondary_field))
+    join: (primary_table, primary_field, secondary_table, secondary_field) ->
+        this._add_join(new Join(primary_table, primary_field, secondary_table, secondary_field))
         
         return this
     
-    _add_join: (join_obj) =>
+    _add_join: (join_obj) ->
         if not @primary_table
             throw {
                 name: 'Error',
