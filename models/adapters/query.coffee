@@ -79,16 +79,17 @@ class Query
         return "`#{fieldName}`"
     
     toString: ->
-        queryParts = [];
+        queryParts = []
+        @valuesList = []
         
         switch @type.toLowerCase()
             when 'select'
                 if @select_fields is '*'
                     queryParts.push('SELECT *')
                 else
-                    @select_fields = (@escapeField(field) for field in @select_fields)
+                    fields = (@escapeField(field) for field in @select_fields)
                     
-                    queryParts.push("SELECT #{@select_fields.join(', ')}")
+                    queryParts.push("SELECT #{fields.join(', ')}")
         
         queryParts.push("FROM #{@escapeField(@primary_table)}")
         
@@ -100,8 +101,12 @@ class Query
             queryParts.push('WHERE')
             for clause in @where_clauses
                 queryParts.push("\t(#{clause[0]})")
+                @valuesList.push(clause[1])
         
         return queryParts.join('\n')
+    
+    execute: ->
+        return @adapter.execute(this.toString(), @valuesList)
     
 
 exports.Query = Query

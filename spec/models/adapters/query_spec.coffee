@@ -1,3 +1,4 @@
+AdapterInterface = require('../../../models/adapters/interface').AdapterInterface
 Query = require('../../../models/adapters/query').Query
 Join = require('../../../models/adapters/join').Join
 
@@ -91,3 +92,17 @@ describe 'Query', ->
             
             expect(q.toString()).toEqual("SELECT `some_field`, `another_field`\nFROM `a_table`\nJOIN `table_b` ON (`a_table`.`some_field` = `table_b`.`field_b`)\nWHERE\n\t(`some_field` <> ?)")
             
+    describe '#execute', ->
+        it 'should call through to the adapter', ->
+            fakeAdapter = {
+                execute: ->
+                    
+            }
+            
+            spyOn(fakeAdapter, 'execute')
+              
+            q = new Query(fakeAdapter)
+            q.select('some_field', 'another_field').from('a_table').join('a_table', 'some_field', 'table_b', 'field_b').where('some_field__neq', 'my_value')
+            q.execute()
+            
+            expect(fakeAdapter.execute).toHaveBeenCalledWith(q.toString(), ['my_value'])
