@@ -42,8 +42,6 @@ describe 'AdapterInterface', ->
         it 'should accept a model and return a sql string', ->
             class TestModel extends model.Model
                 @some_string = new model.CharField()
-              
-            model.define(TestModel)
             
             adapter = new AdapterInterface()
             

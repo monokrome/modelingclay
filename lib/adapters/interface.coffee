@@ -34,21 +34,15 @@ class AdapterInterface
                 message: 'Must be a subclass of Model!'
             }
         
-        if not modelClass.metadata?
-            throw {
-                name: 'Error',
-                message: 'You need to call define() for this Model first.'
-            }
-        
-        if not modelClass.metadata.fields
+        if not modelClass.metadata().fields
             throw {
                 name: 'Error',
                 message: 'Models should contain fields.'
             }
         
-        output = ["CREATE TABLE `#{modelClass.metadata.tableName}` ("]
+        output = ["CREATE TABLE `#{modelClass.metadata().tableName}` ("]
         # log modelClass.metadata.fields
-        for fieldName, fieldObj of modelClass.metadata.fields
+        for fieldName, fieldObj of modelClass.metadata().fields
             output.push @fieldToSql(fieldObj)
         
         output.push ')'

@@ -9,30 +9,38 @@ CharField = require('./fields/char').CharField
 __models = {}
 
 class Model
-	constructor: (args) ->
-		# pass
+    constructor: (args) ->
+        # I wish CoffeeScript had the capability to get all subclasses of Model so something
+        # like this isn't required.
+        this.constructor.metadata()
+    
+    @metadata: ->
+        if not @__metadata
+            define(this)
+        
+        return @__metadata
 
 tableize = (string) ->
-	return inflect.pluralize(inflect.underscore(string))
+    return inflect.pluralize(inflect.underscore(string))
 
-exports.define = (modelClass) ->
-	modelName = modelClass.name
-	
-	metadata = {
-		name: modelName,
-		tableName: tableize(modelName)
-		fields: {}
-	}
-	
-	for name, field of modelClass
-		if field instanceof Field
-			field.setup(name)
-			metadata.fields[name] = field
-	
-	# log metadata
-	
-	modelClass.metadata = metadata
-	modelClass.objects = new QueryManager(modelClass)
+define = (modelClass) ->
+    modelName = modelClass.name
+    
+    metadata = {
+        name: modelName,
+        tableName: tableize(modelName)
+        fields: {}
+    }
+    
+    for name, field of modelClass
+        if field instanceof Field
+            field.setup(name)
+            metadata.fields[name] = field
+    
+    # log metadata
+    
+    modelClass.__metadata = metadata
+    modelClass.objects = new QueryManager(modelClass)
 
 
 exports.Model = Model
