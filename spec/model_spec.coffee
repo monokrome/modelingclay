@@ -4,9 +4,7 @@ class User extends model.Model
 
 
 describe 'Model', ->
-    
     describe 'a subclass called User', ->
-        
         it '#metadata should setup the model data', ->
             delete User.__metadata
             
