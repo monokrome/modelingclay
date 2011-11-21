@@ -4,4 +4,8 @@ ModelingClay is an ORM for Node.js written in CoffeeScript.
 
 I was inspired mostly by Django's ORM, but I also have borrowed some ideas from Rails.  It is my hope that this library will help others accelerate their node projects.
 
-License is MIT.
+The entire project is test driven, and you can run tests by running the script called "sentrygun" in the bin folder.
+
+I will accept pull requests only if they come with properly written specs.  Forgetting to write tests will get you ignored.  Sorry but I want this to be a rock-solid library, so tests are a must!
+
+License is MIT, details can be found in the LICENSE file.
