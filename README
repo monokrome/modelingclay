@@ -1,0 +1,7 @@
+THIS PROJECT IS INCOMPLETE.  DO NOT USE UNLESS YOU WANT TO FINISH IT! :P
+
+ModelingClay is an ORM for Node.js written in CoffeeScript.
+
+I was inspired mostly by Django's ORM, but I also have borrowed some ideas from Rails.  It is my hope that this library will help others accelerate their node projects.
+
+License is MIT.
