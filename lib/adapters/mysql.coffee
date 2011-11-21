@@ -1,5 +1,5 @@
 AdapterInterface = require('./interface').AdapterInterface
-Query = require('./query').Query
+Query = require('../query').Query
 
 mysql = require 'mysql'
 

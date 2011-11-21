@@ -1,6 +1,6 @@
 Database = require('../../models/database').Database
 MySqlAdapter = require('../../models/adapters/mysql').MySqlAdapter
-Query = require('../../models/adapters/query').Query
+Query = require('../../models/query').Query
 
 
 describe 'Database', ->
