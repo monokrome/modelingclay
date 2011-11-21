@@ -1,4 +1,4 @@
-model = require '../models/model'
+model = require '../lib/model'
 
 global['model'] = model
 

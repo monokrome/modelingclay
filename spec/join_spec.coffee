@@ -1,4 +1,4 @@
-Join = require('../../models/join').Join
+Join = require('../lib/join').Join
 
 describe 'Join', ->
     describe '#toString', ->

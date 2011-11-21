@@ -1,6 +1,6 @@
-AdapterInterface = require('../../../models/adapters/interface').AdapterInterface
-Query = require('../../../models/query').Query
-Join = require('../../../models/join').Join
+AdapterInterface = require('../lib/adapters/interface').AdapterInterface
+Query = require('../lib/query').Query
+Join = require('../lib/join').Join
 
 describe 'Query', ->
     describe '#select', ->

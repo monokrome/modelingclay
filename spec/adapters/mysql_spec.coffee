@@ -1,5 +1,5 @@
-MySqlAdapter = require('../../../models/adapters/mysql').MySqlAdapter
-Query = require('../../../models/query').Query
+MySqlAdapter = require('../../lib/adapters/mysql').MySqlAdapter
+Query = require('../../lib/query').Query
 
 mysql = require 'mysql'
 
