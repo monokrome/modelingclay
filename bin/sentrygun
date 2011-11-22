@@ -4,9 +4,9 @@ exec = require('child_process').exec
 
 run_all_specs = ->
 	exec 'jasmine-node --coffee spec', (error, stdout, stderr) ->
-		console.log('====================================================================================')
-		console.log(stdout)
-		console.log(stderr)
+		console.log('PEW PEW PEW ===========================================================')
+		console.log(stdout.trim())
+		console.log(stderr.trim())
 		console.log("Last run: #{new Date()}")
 
 run_all_specs()

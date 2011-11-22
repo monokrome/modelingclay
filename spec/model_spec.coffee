@@ -39,6 +39,8 @@ describe 'Model', ->
             expect(fields.username).toBeDefined()
             expect(fields.username).toBeInstanceOf(model.CharField)
             expect(fields.username.name).toEqual('username')
+            
+            expect(User.metadata().fieldNames).toContain('username', 'password')
         
         it 'should define a class member called objects which is a QueryManager', ->
             expect(User.objects).toBeInstanceOf(model.QueryManager)

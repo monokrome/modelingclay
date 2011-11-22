@@ -1,5 +1,10 @@
 AdapterInterface = require('../../lib/adapters/interface').AdapterInterface
 model = require('../../lib/model')
+indexes = require '../../lib/indexes'
+
+class TestModel extends model.Model
+    @thing = new model.CharField()
+    @thing2 = new model.CharField()
 
 describe 'AdapterInterface', ->
     describe '#connect', ->
@@ -38,6 +43,13 @@ describe 'AdapterInterface', ->
             
             expect(executeThrowsError).toThrow('Not Implemented.')
     
+    describe '#escapeFieldNames', ->
+        it 'should work with a string', ->
+            adapter = new AdapterInterface()
+            
+            expect(adapter.escapeFieldName('some_field')).toEqual('`some_field`')
+            expect(adapter.escapeFieldName('some_table.some_field')).toEqual('`some_table`.`some_field`')
+    
     describe '#createTable', ->
         it 'should accept a model and return a sql string', ->
             class TestModel extends model.Model
@@ -57,3 +69,16 @@ describe 'AdapterInterface', ->
             charField.setup('char_field')
             
             expect(adapter.fieldToSql(charField)).toEqual('`char_field` varchar(10) NOT NULL')
+    
+    describe '#indexToSql', ->
+        it 'should work with basic indexes', ->
+            adapter = new AdapterInterface()
+            
+            idx = new indexes.Index(TestModel, 'some_string')
+            
+            sql = adapter.generateSqlForIndex(idx)
+            
+            expect(sql).toEqual('KEY `IDX_test_models_some_string` (`some_string`)')
+
+
+

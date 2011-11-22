@@ -1,14 +1,22 @@
 model = require('../../lib/model')
 Index = require('../../lib/indexes/index').Index
 
+class TestModel extends model.Model
+    @thing = new model.CharField()
+    @thing2 = new model.CharField()
+
 describe 'Index', ->
     describe '#constructor', ->
         it 'should accept a modelClass and list of field names, then generate an index name', ->
-            class TestModel extends model.Model
-                @thing = new model.CharField()
+            index = new Index(TestModel, 'thing', 'thing2')
             
-            index = new Index(TestModel, ['thing'])
+            expect(index.name).toEqual('IDX_test_models_thing_thing2')
             
-            expect(index.name).toEqual('IDX_test_models_thing')
+        it 'should should throw an error if a field name does not exist in the model', ->
+            test = ->
+                index = new Index(TestModel, 'non_existent_field')
+            
+            expect(test).toThrow('Cannot find field: non_existent_field in model: TestModel.')
+            
             
         

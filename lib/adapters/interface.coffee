@@ -1,4 +1,5 @@
 model = require('../model')
+indexes = require '../indexes'
 
 class AdapterInterface
     constructor: (args) ->
@@ -27,6 +28,16 @@ class AdapterInterface
             message: 'Not Implemented.'
         }
     
+    escapeFieldName: (fields...) ->
+        escape = (str) ->
+            if str.indexOf('.') == -1
+                return "`#{str}`"
+            else
+                parts = str.split('.')
+                return "`#{parts.join('`.`')}`"
+        
+        return escape(field) for field in fields
+    
     createTable: (modelClass) ->
         if not modelClass instanceof model.Model
             throw {
@@ -40,7 +51,7 @@ class AdapterInterface
                 message: 'Models should contain fields.'
             }
         
-        output = ["CREATE TABLE `#{modelClass.metadata().tableName}` ("]
+        output = ["CREATE TABLE #{@escapeFieldName(modelClass.metadata().tableName)} ("]
         # log modelClass.metadata.fields
         for fieldName, fieldObj of modelClass.metadata().fields
             output.push @fieldToSql(fieldObj)
@@ -51,11 +62,15 @@ class AdapterInterface
     
     fieldToSql: (field) ->
         if field instanceof model.CharField
-            return "`#{field.name}` varchar(#{field.max_length}) NOT NULL"
+            return "#{@escapeFieldName(field.name)} varchar(#{field.max_length}) NOT NULL"
         
         throw {
             name: 'Error',
             message: "Did not understand field type: #{fieldType}"
         }
+    
+    generateSqlForIndex: (index) ->
+        if index instanceof indexes.Index
+            return "KEY `#{index.name}` (#{@escapeFieldName(index.fields)})"
 
 exports.AdapterInterface = AdapterInterface
