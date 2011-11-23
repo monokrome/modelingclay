@@ -1,10 +1,11 @@
 AdapterInterface = require('../../lib/adapters/interface').AdapterInterface
 model = require('../../lib/model')
+fields = require('../../lib/fields')
 indexes = require '../../lib/indexes'
 
 class TestModel extends model.Model
-    @thing = new model.CharField()
-    @thing2 = new model.CharField()
+    @thing = new fields.CharField()
+    @thing2 = new fields.CharField()
 
 describe 'AdapterInterface', ->
     describe '#connect', ->
@@ -53,7 +54,7 @@ describe 'AdapterInterface', ->
     describe '#createTable', ->
         it 'should accept a model and return a sql string', ->
             class TestModel extends model.Model
-                @some_string = new model.CharField()
+                @some_string = new fields.CharField()
             
             adapter = new AdapterInterface()
             
@@ -65,7 +66,7 @@ describe 'AdapterInterface', ->
         it 'should work with basic field types', ->
             adapter = new AdapterInterface()
             
-            charField = new model.CharField(@max_length = 10)
+            charField = new fields.CharField(@max_length = 10)
             charField.setup('char_field')
             
             expect(adapter.fieldToSql(charField)).toEqual('`char_field` varchar(10) NOT NULL')

@@ -1,9 +1,10 @@
 model = require('../../lib/model')
+fields = require('../../lib/fields')
 Index = require('../../lib/indexes/index').Index
 
 class TestModel extends model.Model
-    @thing = new model.CharField()
-    @thing2 = new model.CharField()
+    @thing = new fields.CharField()
+    @thing2 = new fields.CharField()
 
 describe 'Index', ->
     describe '#constructor', ->

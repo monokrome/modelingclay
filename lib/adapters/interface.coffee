@@ -1,4 +1,5 @@
 model = require('../model')
+fields = require('../../lib/fields')
 indexes = require '../indexes'
 
 class AdapterInterface
@@ -61,7 +62,7 @@ class AdapterInterface
         return output.join('\n')
     
     fieldToSql: (field) ->
-        if field instanceof model.CharField
+        if field instanceof fields.CharField
             return "#{@escapeFieldName(field.name)} varchar(#{field.max_length}) NOT NULL"
         
         throw {

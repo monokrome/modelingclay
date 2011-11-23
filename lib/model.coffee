@@ -37,7 +37,7 @@ define = (modelClass) ->
         if field instanceof Field
             field.setup(name)
             metadata.fields[name] = field
-            metadata.fieldNames.push name
+            metadata.fieldNames.push(name)
     
     modelClass.__metadata = metadata
     modelClass.objects = new QueryManager(modelClass)
