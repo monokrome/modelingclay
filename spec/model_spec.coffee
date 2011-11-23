@@ -1,9 +1,12 @@
 fields = require('../lib/fields')
+indexes = require('../lib/indexes')
 
 
 class User extends model.Model
     @username = new fields.CharField()
     @password = new fields.CharField()
+    
+    @someIndex = new indexes.Index('username')
 
 
 describe 'Model', ->
@@ -33,6 +36,8 @@ describe 'Model', ->
             expect(meta.tableName).toEqual('users')
             
             expect(meta.fields).toBeDefined()
+            expect(meta.indexes).toBeDefined()
+            expect(meta.primaryKey).toBeDefined()
         
         it 'should store fields in metadata', ->
             expect(User.metadata().fields).toBeDefined()
@@ -45,7 +50,14 @@ describe 'Model', ->
             
             expect(User.metadata().fieldNames).toContain('username', 'password')
         
-        it 'should define a class member called objects which is a QueryManager', ->
-            expect(User.objects).toBeInstanceOf(model.QueryManager)
+        it 'should store indexes in the metadata', ->
+            expect(User.metadata().fields).toBeDefined()
+            
+            modelIndexes = User.metadata().indexes
+            
+            expect(modelIndexes.length).toEqual(1)
+            
+            for index in modelIndexes
+                expect(index.fields).toContain('username')
     
 

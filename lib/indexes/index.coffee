@@ -1,7 +1,10 @@
 inflect = require 'inflect'
 
 class Index
-    constructor: (@modelClass, @fields...) ->
+    constructor: (@fields...) ->
+        @name = null
+        
+    setup: (@modelClass) ->
         modelFields = @modelClass.metadata().fieldNames
         
         for fieldName in @fields

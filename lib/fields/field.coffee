@@ -1,14 +1,15 @@
 inflect = require 'inflect'
 
+utils = require '../utils'
+
 class Field
-    constructor: (opts...) ->
+    constructor: (args) ->
         @name = null
-        @options = opts
     
-    setup: (name) =>
+    setup: (name) ->
         @name = inflect.underscore(name)
     
-    validate: (value) =>
+    validate: (value) ->
         return true
 
 exports.Field = Field

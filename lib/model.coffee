@@ -1,9 +1,7 @@
 inflect = require 'inflect'
 
-QueryManager = require('./querymanager').QueryManager
-
-Field = require('./fields/field').Field
-CharField = require('./fields/char').CharField
+indexes = require './indexes'
+fields = require './fields'
 
 
 __models = {}
@@ -20,8 +18,10 @@ class Model
         
         return @__metadata
 
+
 tableize = (string) ->
     return inflect.pluralize(inflect.underscore(string))
+
 
 define = (modelClass) ->
     modelName = modelClass.name
@@ -30,19 +30,24 @@ define = (modelClass) ->
         name: modelName,
         tableName: tableize(modelName)
         fieldNames: [],
-        fields: {}
+        fields: {},
+        primaryKey: null
+        indexes: []
     }
     
-    for name, field of modelClass
-        if field instanceof Field
-            field.setup(name)
-            metadata.fields[name] = field
+    for name, property of modelClass
+        if property instanceof fields.Field
+            property.setup(name)
+            metadata.fields[name] = property
             metadata.fieldNames.push(name)
+        
+        if property instanceof indexes.Index
+            metadata.indexes.push(property)
     
     modelClass.__metadata = metadata
-    modelClass.objects = new QueryManager(modelClass)
+    
+    for index in metadata.indexes
+        index.setup(modelClass)
 
 
 exports.Model = Model
-exports.QueryManager = QueryManager
-exports.CharField = CharField

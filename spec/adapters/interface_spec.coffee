@@ -55,12 +55,14 @@ describe 'AdapterInterface', ->
         it 'should accept a model and return a sql string', ->
             class TestModel extends model.Model
                 @some_string = new fields.CharField()
+                
+                @testIndex = new indexes.Index('some_string')
             
             adapter = new AdapterInterface()
             
             sql = adapter.createTable(TestModel)
             
-            expect(sql).toEqual("CREATE TABLE `test_models` (\n`some_string` varchar(100) NOT NULL\n)")
+            expect(sql).toEqual("CREATE TABLE `test_models` (\n`some_string` varchar(100) NOT NULL,\nKEY `IDX_test_models_some_string` (`some_string`)\n)")
         
     describe '#fieldToSql', ->
         it 'should work with basic field types', ->
@@ -75,7 +77,8 @@ describe 'AdapterInterface', ->
         it 'should work with basic indexes', ->
             adapter = new AdapterInterface()
             
-            idx = new indexes.Index(TestModel, 'some_string')
+            idx = new indexes.Index('some_string')
+            idx.setup(TestModel)
             
             sql = adapter.generateSqlForIndex(idx)
             

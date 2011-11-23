@@ -52,10 +52,19 @@ class AdapterInterface
                 message: 'Models should contain fields.'
             }
         
-        output = ["CREATE TABLE #{@escapeFieldName(modelClass.metadata().tableName)} ("]
-        # log modelClass.metadata.fields
+        
+        
+        fieldsSql = []
         for fieldName, fieldObj of modelClass.metadata().fields
-            output.push @fieldToSql(fieldObj)
+            fieldsSql.push @fieldToSql(fieldObj)
+        
+        for index in modelClass.metadata().indexes
+            fieldsSql.push @generateSqlForIndex(index)
+        
+        output = []
+        output.push "CREATE TABLE #{@escapeFieldName(modelClass.metadata().tableName)} ("
+        
+        output.push fieldsSql.join(',\n')
         
         output.push ')'
         
@@ -73,5 +82,7 @@ class AdapterInterface
     generateSqlForIndex: (index) ->
         if index instanceof indexes.Index
             return "KEY `#{index.name}` (#{@escapeFieldName(index.fields)})"
+            
+        # CONSTRAINT `created_id_refs_id_2b18c3a3` FOREIGN KEY (`created_id`) REFERENCES `repository_auditevent` (`id`),
 
 exports.AdapterInterface = AdapterInterface

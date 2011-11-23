@@ -1,10 +1,11 @@
 fields = require('../../lib/fields')
 
+
 describe 'CharField', ->
-    describe 'validate', ->
+    describe '#validate', ->
         make_field = (name = 'test_field') ->
             field = new fields.CharField()
-            field.name = name
+            field.setup(name)
             
             return field
         
