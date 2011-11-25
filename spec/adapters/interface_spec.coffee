@@ -62,7 +62,7 @@ describe 'AdapterInterface', ->
             
             sql = adapter.createTable(TestModel)
             
-            expect(sql).toEqual("CREATE TABLE `test_models` (\n`some_string` varchar(100) NOT NULL,\nKEY `IDX_test_models_some_string` (`some_string`)\n)")
+            expect(sql).toEqual("CREATE TABLE `test_models` (\n`some_string` varchar(100) NOT NULL,\n`id` int(11) NOT NULL,\nKEY `IDX_test_models_some_string` (`some_string`)\n)")
         
     describe '#fieldToSql', ->
         it 'should work with basic field types', ->

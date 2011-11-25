@@ -50,9 +50,7 @@ class AdapterInterface
             throw {
                 name: 'Error',
                 message: 'Models should contain fields.'
-            }
-        
-        
+            }        
         
         fieldsSql = []
         for fieldName, fieldObj of modelClass.metadata().fields
@@ -74,9 +72,12 @@ class AdapterInterface
         if field instanceof fields.CharField
             return "#{@escapeFieldName(field.name)} varchar(#{field.max_length}) NOT NULL"
         
+        if field instanceof fields.IntegerField
+            return "#{@escapeFieldName(field.name)} int(11) NOT NULL"
+
         throw {
             name: 'Error',
-            message: "Did not understand field type: #{fieldType}"
+            message: "Did not understand field type: #{field.constructor.name}"
         }
     
     generateSqlForIndex: (index) ->

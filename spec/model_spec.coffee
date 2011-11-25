@@ -44,7 +44,7 @@ describe 'Model', ->
             
             modelFields = User.metadata().fields
             
-            expect(modelFields.username).toBeDefined()
+            expect(modelFields).toContainKey('username')
             expect(modelFields.username).toBeInstanceOf(fields.CharField)
             expect(modelFields.username.name).toEqual('username')
             
@@ -59,5 +59,19 @@ describe 'Model', ->
             
             for index in modelIndexes
                 expect(index.fields).toContain('username')
-    
+        
+        it 'should automatically add an integer based primary key when one does not exist', ->
+            expect(User.metadata()).toContainKey('fields')
+            expect(User.metadata()).toContainKey('indexes')
+
+            modelFields = User.metadata().fields
+            modelIndexes = User.metadata().indexes
+
+            expect(modelFields).toContainKey('id')
+            expect(modelFields.id).toBeInstanceOf(fields.AutoIntegerField)
+
+            expect(modelIndexes).toContain()
+
+
+            
 

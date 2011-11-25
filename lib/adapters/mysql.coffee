@@ -1,5 +1,6 @@
 AdapterInterface = require('./interface').AdapterInterface
 Query = require('../query').Query
+fields = require('../../lib/fields')
 
 mysql = require 'mysql'
 
@@ -23,6 +24,13 @@ class MySqlAdapter extends AdapterInterface
     
     execute: (sql_statement, sql_params, callback) ->
         @client.query(sql_statement, sql_params, callback)
+    
+    fieldToSql: (field) ->
+        if field instanceof fields.AutoIntegerField
+            return "#{@escapeFieldName(field.name)} int(11) NOT NULL AUTO_INCREMENT"
+        
+        return super.fieldToSql(field)
+
 
 exports.MySqlAdapter = MySqlAdapter
    

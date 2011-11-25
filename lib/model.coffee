@@ -37,17 +37,25 @@ define = (modelClass) ->
     
     for name, property of modelClass
         if property instanceof fields.Field
-            property.setup(name)
-            metadata.fields[name] = property
-            metadata.fieldNames.push(name)
+            setupField(metadata, property, name)
         
         if property instanceof indexes.Index
             metadata.indexes.push(property)
     
     modelClass.__metadata = metadata
+
+    if metadata.primaryKey is null
+        metadata.primaryKey = setupField(metadata, new fields.AutoIntegerField(), 'id')
     
     for index in metadata.indexes
         index.setup(modelClass)
+
+setupField = (metadata, field, name) ->
+    field.setup(name)
+    metadata.fields[name] = field
+    metadata.fieldNames.push(name)
+
+    return field
 
 
 exports.Model = Model
