@@ -1,0 +1,30 @@
+info it worked if it ends with ok
+verbose cli [ 'node',
+verbose cli   '/Users/pplante/.nvm/v0.6.2/bin/npm',
+verbose cli   'edit',
+verbose cli   'inflect' ]
+info using npm@1.0.106
+info using node@v0.6.2
+verbose config file /Users/pplante/.npmrc
+verbose config file /Users/pplante/.nvm/v0.6.2/etc/npmrc
+verbose config file /Users/pplante/.nvm/v0.6.2/lib/node_modules/npm/npmrc
+silly exec mate -w "/Users/pplante/Projects/modelingclay/node_modules/inflect"
+silly spawning [ 'mate -w',
+silly spawning   [ '/Users/pplante/Projects/modelingclay/node_modules/inflect' ],
+silly spawning   null ]
+ERR! Error: `mate -w "/Users/pplante/Projects/modelingclay/node_modules/inflect"` failed with 127
+ERR!     at ChildProcess.<anonymous> (/Users/pplante/.nvm/v0.6.2/lib/node_modules/npm/lib/utils/exec.js:49:20)
+ERR!     at ChildProcess.emit (events.js:70:17)
+ERR!     at maybeExit (child_process.js:359:16)
+ERR!     at Process.onexit (child_process.js:395:5)
+ERR! Report this *entire* log at:
+ERR!     <http://github.com/isaacs/npm/issues>
+ERR! or email it to:
+ERR!     <npm-@googlegroups.com>
+ERR! 
+ERR! System Darwin 11.2.0
+ERR! command "node" "/Users/pplante/.nvm/v0.6.2/bin/npm" "edit" "inflect"
+ERR! cwd /Users/pplante/Projects/modelingclay
+ERR! node -v v0.6.2
+ERR! npm -v 1.0.106
+verbose exit [ 1, true ]
