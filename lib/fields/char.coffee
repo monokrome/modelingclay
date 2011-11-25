@@ -1,7 +1,7 @@
 Field = require('./field').Field
 
 class CharField extends Field
-    constructor: (@max_length = 100) ->
+    constructor: (@maxLength = 100) ->
         super
     
     validate: (value) =>

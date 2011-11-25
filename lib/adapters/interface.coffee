@@ -54,10 +54,10 @@ class AdapterInterface
         
         fieldsSql = []
         for fieldName, fieldObj of modelClass.metadata().fields
-            fieldsSql.push @fieldToSql(fieldObj)
+            fieldsSql.push @fieldToSql(modelClass, fieldObj)
         
         for index in modelClass.metadata().indexes
-            fieldsSql.push @generateSqlForIndex(index)
+            fieldsSql.push @generateSqlForIndex(modelClass, index)
         
         output = []
         output.push "CREATE TABLE #{@escapeFieldName(modelClass.metadata().tableName)} ("
@@ -68,10 +68,13 @@ class AdapterInterface
         
         return output.join('\n')
     
-    fieldToSql: (field) ->
+    fieldToSql: (modelClass, field) ->
         if field instanceof fields.CharField
-            return "#{@escapeFieldName(field.name)} varchar(#{field.max_length}) NOT NULL"
+            return "#{@escapeFieldName(field.name)} varchar(#{field.maxLength}) NOT NULL"
         
+        if field instanceof fields.BooleanField
+            return "#{@escapeFieldName(field.name)} tinyint(1) NOT NULL"
+
         if field instanceof fields.IntegerField
             return "#{@escapeFieldName(field.name)} int(11) NOT NULL"
 
@@ -80,7 +83,7 @@ class AdapterInterface
             message: "Did not understand field type: #{field.constructor.name}"
         }
     
-    generateSqlForIndex: (index) ->
+    generateSqlForIndex: (modelClass, index) ->
         if index instanceof indexes.PrimaryKey
             return "PRIMARY KEY (#{@escapeFieldName(index.fields)})"
             

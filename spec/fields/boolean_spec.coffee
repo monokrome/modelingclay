@@ -1,10 +1,10 @@
 fields = require('../../lib/fields')
 
 
-describe 'CharField', ->
+describe 'BooleanField', ->
     describe '#validate', ->
         make_field = (name = 'test_field') ->
-            field = new fields.CharField()
+            field = new fields.BooleanField()
             field.setup(name)
             
             return field
@@ -13,15 +13,15 @@ describe 'CharField', ->
             field = make_field()
             
             expect(field.name).toEqual('test_field')
-            expect(field.maxLength).toEqual(100)
+            expect(field.defaultValue).toEqual(false)
         
-        it 'should raise error when value is not a string', ->
+        it 'should raise error when value is not a bool', ->
             field = make_field()
-            test = -> field.validate(10)
+            test = -> throw field.validate('a string')
             
-            expect(test).toThrow('test_field should be a string.')
+            expect(test).toThrow('test_field should be a boolean value.')
         
         it 'should return true when the value is a string', ->
             field = make_field()
             
-            expect(field.validate('some string')).toBeTruthy()
+            expect(field.validate(true)).toBeTruthy()
