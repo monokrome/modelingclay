@@ -62,7 +62,7 @@ describe 'AdapterInterface', ->
             
             sql = adapter.createTable(TestModel)
             
-            expect(sql).toEqual("CREATE TABLE `test_models` (\n`some_string` varchar(100) NOT NULL,\n`id` int(11) NOT NULL,\nKEY `IDX_test_models_some_string` (`some_string`)\n)")
+            expect(sql).toEqual("CREATE TABLE `test_models` (\n`some_string` varchar(100) NOT NULL,\n`id` int(11) NOT NULL,\nKEY `IDX_test_index` (`some_string`)\n)")
         
     describe '#fieldToSql', ->
         it 'should work with basic field types', ->
@@ -78,11 +78,21 @@ describe 'AdapterInterface', ->
             adapter = new AdapterInterface()
             
             idx = new indexes.Index('some_string')
-            idx.setup(TestModel)
+            idx.setup('the_index_name')
             
             sql = adapter.generateSqlForIndex(idx)
             
-            expect(sql).toEqual('KEY `IDX_test_models_some_string` (`some_string`)')
+            expect(sql).toEqual('KEY `IDX_the_index_name` (`some_string`)')
+        
+        it 'should work with primary keys', ->
+            adapter = new AdapterInterface()
+            
+            idx = new indexes.PrimaryKey('some_string')
+            idx.setup('the_index_name')
+            
+            sql = adapter.generateSqlForIndex(idx)
+            
+            expect(sql).toEqual('PRIMARY KEY (`some_string`)')
 
 
 

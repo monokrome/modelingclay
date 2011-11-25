@@ -32,7 +32,8 @@ define = (modelClass) ->
         fieldNames: [],
         fields: {},
         primaryKey: null
-        indexes: []
+        indexes: [],
+        indexNames: []
     }
     
     for name, property of modelClass
@@ -40,7 +41,7 @@ define = (modelClass) ->
             setupField(metadata, property, name)
         
         if property instanceof indexes.Index
-            metadata.indexes.push(property)
+            setupIndex(metadata, property, name)
     
     modelClass.__metadata = metadata
 
@@ -48,7 +49,7 @@ define = (modelClass) ->
         metadata.primaryKey = setupField(metadata, new fields.AutoIntegerField(), 'id')
     
     for index in metadata.indexes
-        index.setup(modelClass)
+        index.validate(modelClass)
 
 setupField = (metadata, field, name) ->
     field.setup(name)
@@ -56,6 +57,13 @@ setupField = (metadata, field, name) ->
     metadata.fieldNames.push(name)
 
     return field
+
+setupIndex = (metadata, index, nameFromModel) ->
+    index.setup(nameFromModel)
+    metadata.indexes.push(index)
+    metadata.indexNames.push(nameFromModel)
+
+    return index
 
 
 exports.Model = Model

@@ -81,9 +81,11 @@ class AdapterInterface
         }
     
     generateSqlForIndex: (index) ->
-        if index instanceof indexes.Index
-            return "KEY `#{index.name}` (#{@escapeFieldName(index.fields)})"
+        if index instanceof indexes.PrimaryKey
+            return "PRIMARY KEY (#{@escapeFieldName(index.fields)})"
             
-        # CONSTRAINT `created_id_refs_id_2b18c3a3` FOREIGN KEY (`created_id`) REFERENCES `repository_auditevent` (`id`),
+        if index instanceof indexes.Index
+            return "KEY `IDX_#{index.name}` (#{@escapeFieldName(index.fields)})"
+        
 
 exports.AdapterInterface = AdapterInterface

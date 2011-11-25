@@ -19,10 +19,11 @@ describe 'Index', ->
     describe '#setup', ->
         it 'should generate the index name', ->
             index = new Index('thing', 'thing2')
-            index.setup(TestModel)
+            index.setup('index_name')
             
-            expect(index.name).toEqual('IDX_test_models_thing_thing2')
-        
+            expect(index.name).toEqual('index_name')
+    
+    describe '#validate', ->
         it 'should should throw an error if a field name does not exist in the model', ->
             class TestModel2 extends model.Model
                 @field = new fields.CharField()

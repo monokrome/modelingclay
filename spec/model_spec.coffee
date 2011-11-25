@@ -70,7 +70,7 @@ describe 'Model', ->
             expect(modelFields).toContainKey('id')
             expect(modelFields.id).toBeInstanceOf(fields.AutoIntegerField)
 
-            expect(modelIndexes).toContain()
+            expect(User.metadata().indexNames).toContain('someIndex')
 
 
             
