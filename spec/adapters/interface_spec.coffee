@@ -51,7 +51,7 @@ describe 'AdapterInterface', ->
                 
                 @testIndex = new indexes.Index('some_string')
             
-            expect(adapter.createTable(TestModel)).toEqual("CREATE TABLE `test_models` (\n`some_string` varchar(100) NOT NULL,\n`id` int(11) NOT NULL,\nKEY `IDX_test_index` (`some_string`)\n)")
+            expect(adapter.createTable(TestModel)).toEqual("CREATE TABLE `test_model` (\n`some_string` varchar(100) NOT NULL,\n`id` int(11) NOT NULL,\nKEY `IDX_test_index` (`some_string`)\n)")
         
     describe '#fieldToSql', ->
         it 'should work with char field types', ->

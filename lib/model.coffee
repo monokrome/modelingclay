@@ -14,56 +14,62 @@ class Model
     
     @metadata: ->
         if not @__metadata
-            define(this)
+            @__metadata = new ModelMetadata(this)
+            @__metadata.setup()
         
         return @__metadata
 
 
 tableize = (string) ->
-    return inflect.pluralize(inflect.underscore(string))
+    return inflect.underscore(string)
 
 
-define = (modelClass) ->
-    modelName = modelClass.name
-    
-    metadata = {
-        name: modelName,
-        tableName: tableize(modelName)
-        fieldNames: [],
-        fields: {},
-        primaryKey: null
-        indexes: [],
-        indexNames: []
-    }
-    
-    for name, property of modelClass
-        if property instanceof fields.Field
-            setupField(metadata, property, name)
+class ModelMetadata
+    constructor: (@modelClass) ->
+        @name = @modelClass.name
+        @tableName = tableize(@name)
+        @fieldNames = []
+        @fields = {}
+        @primaryKey = null
+        @indexes = []
+        @indexNames = []
+        @relations = []
+
+    setup: ->
+        for name, property of @modelClass
+            if property instanceof fields.Field
+                @setupField(property, name)
+            
+            if property instanceof indexes.Index
+                @setupIndex(property, name)
+            
+        if @primaryKey is null
+            @setupField(new fields.AutoIntegerField(), 'id')
         
-        if property instanceof indexes.Index
-            setupIndex(metadata, property, name)
+        for index in @indexes
+            index.validate(this)
     
-    modelClass.__metadata = metadata
+    setupField: (field, nameFromModel) ->
+        field.setup(nameFromModel)
 
-    if metadata.primaryKey is null
-        metadata.primaryKey = setupField(metadata, new fields.AutoIntegerField(), 'id')
+        @fields[nameFromModel] = field
+        @fieldNames.push(nameFromModel)
+
+        if field instanceof fields.AutoIntegerField
+            @primaryKey = field
     
-    for index in metadata.indexes
-        index.validate(modelClass)
+    setupIndex: (index, nameFromModel) ->
+        index.setup(nameFromModel)
 
-setupField = (metadata, field, name) ->
-    field.setup(name)
-    metadata.fields[name] = field
-    metadata.fieldNames.push(name)
+        @indexes.push(index)
+        @indexNames.push(nameFromModel)
+    
+    installRelation: (relation) ->
+        @relations.push(relation)
 
-    return field
+        relation.installFields(@modelClass)
 
-setupIndex = (metadata, index, nameFromModel) ->
-    index.setup(nameFromModel)
-    metadata.indexes.push(index)
-    metadata.indexNames.push(nameFromModel)
-
-    return index
 
 
 exports.Model = Model
+exports.ModelMetadata = ModelMetadata

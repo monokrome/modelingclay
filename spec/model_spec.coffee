@@ -1,5 +1,6 @@
 fields = require('../lib/fields')
 indexes = require('../lib/indexes')
+relations = require '../lib/relations'
 
 
 class User extends model.Model
@@ -33,7 +34,7 @@ describe 'Model', ->
             
             expect(meta).toBeDefined()
             expect(meta.name).toEqual('User')
-            expect(meta.tableName).toEqual('users')
+            expect(meta.tableName).toEqual('user')
             
             expect(meta.fields).toBeDefined()
             expect(meta.indexes).toBeDefined()
@@ -71,7 +72,33 @@ describe 'Model', ->
             expect(modelFields.id).toBeInstanceOf(fields.AutoIntegerField)
 
             expect(User.metadata().indexNames).toContain('someIndex')
+    
+    describe '#installRelation', ->
+        it 'should add fields to the model for storing relational data', ->
+            class Message extends model.Model
+                @body = new fields.CharField()
+            
+            rel = new relations.HasMany(Message)
 
+            User.metadata().installRelation(rel)
+
+            modelRelations = User.metadata().relations
+            expect(modelRelations.length).toEqual(1)
+            expect(modelRelations).toContain(rel)
+
+            expect(Message.metadata().fieldNames).toContain('user_id')
+            expect(Message.metadata().fields).toContainKey('user_id')
+            expect(Message.metadata().fields.user_id).toBeInstanceOf(fields.ForeignKeyField)
+
+    describe 'relations', ->
+        it 'should be initialized last', ->
+            class Message extends model.Model
+                @body = new fields.CharField()
+            
+            class User extends model.Model
+                @username = new fields.CharField()
+                
+                @messages = new relations.HasMany(Message)
 
             
 

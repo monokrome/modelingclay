@@ -7,7 +7,10 @@ global['log'] = console.log
 beforeEach ->
 	@addMatchers({
 		toBeInstanceOf: (expected) ->
-			return @actual instanceof expected
+			if @actual instanceof expected
+				return true
+			
+			throw "Expected #{@actual} to be instance of #{expected.name}."
 		
 		toBeEmpty: ->
 			return @actual.length == 0;
