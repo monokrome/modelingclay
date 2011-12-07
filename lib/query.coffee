@@ -86,7 +86,7 @@ class Query
     escapeField: (fieldName) ->
         return "`#{fieldName}`"
     
-    toString: ->
+    toString: (prettyPrint=false) ->
         queryParts = []
         @valuesList = []
         
@@ -108,10 +108,19 @@ class Query
         if @where_clauses and @where_clauses.length? > 0
             queryParts.push('WHERE')
             for clause in @where_clauses
-                queryParts.push("\t(#{clause[0]})")
+                part = "(#{clause[0]})"
+                if prettyPrint
+                    queryParts.push('\t'+ part)
+                else
+                    queryParts.push(part)
+                
                 @valuesList.push(clause[1])
+
+        if not prettyPrint
+            return queryParts.join(' ')
         
         return queryParts.join('\n')
+
     
     execute: ->
         return @adapter.execute(this.toString(), @valuesList, @_handleExecute)
@@ -122,6 +131,11 @@ class Query
         for row in results
             @_results.push(zip(fields, row))
     
+
+class Clause
+    constructor: (args) ->
+    
+
 
 exports.Query = Query
 

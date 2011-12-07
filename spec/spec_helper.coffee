@@ -1,6 +1,6 @@
-model = require '../lib/model'
+clay = require '../lib/clay'
 
-global['model'] = model
+global['clay'] = clay
 
 global['log'] = console.log
 
@@ -25,7 +25,7 @@ beforeEach ->
 			
 			return true
 		
-		toContainKey: (expectedKey) ->
+		toHaveKey: (expectedKey) ->
 			keys = []
 			keys.push k for k, v of @actual
 			

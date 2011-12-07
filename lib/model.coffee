@@ -1,5 +1,6 @@
 inflect = require 'inflect'
 
+QueryManager = require('./query_manager').QueryManager
 indexes = require './indexes'
 fields = require './fields'
 
@@ -34,6 +35,8 @@ class ModelMetadata
         @indexes = []
         @indexNames = []
         @relations = []
+
+        @modelClass.__proto__.objects = new QueryManager(@modelClass)
 
     setup: ->
         for name, property of @modelClass

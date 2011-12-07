@@ -3,7 +3,7 @@ model = require('../../lib/model')
 fields = require('../../lib/fields')
 indexes = require '../../lib/indexes'
 
-class TestModel extends model.Model
+class TestModel extends clay.Model
     @thing = new fields.CharField()
     @thing2 = new fields.CharField()
 
@@ -46,7 +46,7 @@ describe 'AdapterInterface', ->
     
     describe '#createTable', ->
         it 'should accept a model and return a sql string', ->
-            class TestModel extends model.Model
+            class TestModel extends clay.Model
                 @some_string = new fields.CharField()
                 
                 @testIndex = new indexes.Index('some_string')

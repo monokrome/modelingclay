@@ -83,14 +83,14 @@ describe 'Query', ->
             
             q.select('some_field', 'another_field').from('a_table').where('some_field__neq', 'my_value')
             
-            expect(q.toString()).toEqual("SELECT `some_field`, `another_field`\nFROM `a_table`\nWHERE\n\t(`some_field` <> ?)")
+            expect(q.toString(true)).toEqual("SELECT `some_field`, `another_field`\nFROM `a_table`\nWHERE\n\t(`some_field` <> ?)")
         
         it 'should work with joins', ->
             q = new Query()
             
             q.select('some_field', 'another_field').from('a_table').join('a_table', 'some_field', 'table_b', 'field_b').where('some_field__neq', 'my_value')
             
-            expect(q.toString()).toEqual("SELECT `some_field`, `another_field`\nFROM `a_table`\nJOIN `table_b` ON (`a_table`.`some_field` = `table_b`.`field_b`)\nWHERE\n\t(`some_field` <> ?)")
+            expect(q.toString(true)).toEqual("SELECT `some_field`, `another_field`\nFROM `a_table`\nJOIN `table_b` ON (`a_table`.`some_field` = `table_b`.`field_b`)\nWHERE\n\t(`some_field` <> ?)")
             
     describe '#execute', ->
         it 'should call through to the adapter', ->

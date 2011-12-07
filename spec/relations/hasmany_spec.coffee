@@ -14,7 +14,7 @@ describe 'relations.HasMany', ->
         it 'should accept a model', ->
             rel = new relations.HasMany(TestModel)
 
-            expect(rel).toContainKey('childModel')
+            expect(rel).toHaveKey('childModel')
             expect(rel.childModel).toEqual(TestModel)
 
         it 'should throw an error when the first argument is not a Model', ->

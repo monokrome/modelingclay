@@ -40,7 +40,7 @@ class AdapterInterface
         return escape(field) for field in fields
     
     createTable: (modelClass) ->
-        if not modelClass instanceof model.Model
+        if not modelClass instanceof clay.Model
             throw {
                 name: 'Error',
                 message: 'Must be a subclass of Model!'

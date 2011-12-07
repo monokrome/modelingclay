@@ -1,9 +1,10 @@
 fields = require('../lib/fields')
 indexes = require('../lib/indexes')
-relations = require '../lib/relations'
+relations = require('../lib/relations')
+QueryManager = require('../lib/query_manager').QueryManager
 
 
-class User extends model.Model
+class User extends clay.Model
     @username = new fields.CharField()
     @password = new fields.CharField()
     
@@ -45,7 +46,7 @@ describe 'Model', ->
             
             modelFields = User.metadata().fields
             
-            expect(modelFields).toContainKey('username')
+            expect(modelFields).toHaveKey('username')
             expect(modelFields.username).toBeInstanceOf(fields.CharField)
             expect(modelFields.username.name).toEqual('username')
             
@@ -62,20 +63,20 @@ describe 'Model', ->
                 expect(index.fields).toContain('username')
         
         it 'should automatically add an integer based primary key when one does not exist', ->
-            expect(User.metadata()).toContainKey('fields')
-            expect(User.metadata()).toContainKey('indexes')
+            expect(User.metadata()).toHaveKey('fields')
+            expect(User.metadata()).toHaveKey('indexes')
 
             modelFields = User.metadata().fields
             modelIndexes = User.metadata().indexes
 
-            expect(modelFields).toContainKey('id')
+            expect(modelFields).toHaveKey('id')
             expect(modelFields.id).toBeInstanceOf(fields.AutoIntegerField)
 
             expect(User.metadata().indexNames).toContain('someIndex')
     
     describe '#installRelation', ->
         it 'should add fields to the model for storing relational data', ->
-            class Message extends model.Model
+            class Message extends clay.Model
                 @body = new fields.CharField()
             
             rel = new relations.HasMany(Message)
@@ -87,18 +88,17 @@ describe 'Model', ->
             expect(modelRelations).toContain(rel)
 
             expect(Message.metadata().fieldNames).toContain('user_id')
-            expect(Message.metadata().fields).toContainKey('user_id')
+            expect(Message.metadata().fields).toHaveKey('user_id')
             expect(Message.metadata().fields.user_id).toBeInstanceOf(fields.ForeignKeyField)
-
-    describe 'relations', ->
-        it 'should be initialized last', ->
-            class Message extends model.Model
+    
+    describe 'objects', ->
+        it 'should be of instance QueryManager', ->
+            class Message extends clay.Model
                 @body = new fields.CharField()
             
-            class User extends model.Model
-                @username = new fields.CharField()
-                
-                @messages = new relations.HasMany(Message)
+
+            expect(Message).toHaveKey('objects')
+            expect(Message.objects).toBeInstanceOf(QueryManager)
 
             
 
