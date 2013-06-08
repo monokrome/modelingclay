@@ -9,6 +9,7 @@
         "url": "http://github.com/pplante/modelingclay.git"
     },
     "devDependencies": {
-        "sentry": "0.1.2"
+        "sentry": "0.1.2",
+        "jasmine-node": "1.8.0"
     }
 }
