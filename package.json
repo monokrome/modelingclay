@@ -1,11 +1,18 @@
 {
     "name": "modelingclay",
-    "version": "v0.1.0"
     "description": "ModelingClay is a database agnostic ORM",
     "author": "Phil Plante <unhappyrobot@gmail.com>",
-    "engine": "node >= 0.6.1"
+    "version": "v0.1.0",
+
+    "engine": "node >= 0.6.1",
+
     "repository": {
         "type": "git",
         "url": "http://github.com/pplante/modelingclay.git"
+    },
+
+    "devDependencies": {
+        "sentry": ">= 0.1.2 < 1.2",
+        "jasmine-node": ">= 1.8.0 < 1.9"
     }
 }
