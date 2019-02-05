@@ -13,6 +13,6 @@
 
     "devDependencies": {
         "sentry": ">= 0.1.2 < 1.2",
-        "jasmine-node": ">= 1.8.0 < 1.9"
+        "jasmine-node": ">=1.16.2"
     }
 }
